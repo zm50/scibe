@@ -4,8 +4,12 @@ import "gorm.io/gorm"
 
 type Content struct {
 	gorm.Model
-	FilePath string
-	FileExtraction string
+	Fid uint
+	Extraction string
 	FileMindmap string
 	FileSummary string
+}
+
+func (Content) TableName() string {
+	return "backend.content"
 }

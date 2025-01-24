@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"scibe/global"
 	"scibe/handler"
 	"scibe/middleware"
@@ -9,7 +10,17 @@ import (
 )
 
 func main() {
+	f := flag.String("f", "", "config file")
+
+	flag.Parse()
+
+	if f == nil {
+		panic("config file is required")
+	}
+
+	global.InitConfig(*f)
 	global.InitDB()
+	global.InitLLM()
 
 	r := gin.Default()
 	v1 := r.Group("/api/v1")
@@ -20,12 +31,15 @@ func main() {
 
 	file := v1.Group("/file").Use(middleware.Auth)
 	file.POST("/upload", handler.UploadFile)
-	file.GET("/list/:uid", handler.Files)
+	file.GET("/list", handler.Files)
+	file.GET("/text/extract", handler.FileExtractText)
 
 	chat := v1.Group("/chat").Use(middleware.Auth)
-	chat.GET("/completion/:prompt", handler.ChatCompletion)
+	chat.POST("/text/extract", handler.ChatExtractText)
+	chat.POST("/summary", handler.ChatPaperSummary)
+	chat.POST("/completion", handler.ChatCompletion)
 
-	if err := r.Run(":80"); err != nil {
+	if err := r.Run(":8000"); err != nil {
 		panic(err)
 	}
 }

@@ -1,15 +1,27 @@
 package global
 
-import "os"
+import (
+	"os"
+	"scibe/utils/config"
 
-const (
-	JWT_SECRET = "JWT_SECRET"
+	"gopkg.in/yaml.v3"
 )
 
-func GetJWTSecret() string {
-	secret, ok := os.LookupEnv(JWT_SECRET)
-	if !ok {
-		return "zuimojushi"
+var cfg config.Config
+
+func InitConfig(fp string) {
+	file, err := os.Open(fp)
+	if err != nil {
+		panic(err)
 	}
-	return secret
+	defer file.Close()
+
+	err = yaml.NewDecoder(file).Decode(&cfg)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func Config() config.Config {
+	return cfg
 }

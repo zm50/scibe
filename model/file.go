@@ -1,9 +1,17 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
-type File struct {
+type DocFile struct {
 	gorm.Model
-	OriginalFilename string
-	Md5 string
+	Uid uint
+	Name string
+	Extension string
+	Md5 []byte `gorm:"type:bytea"`
+}
+
+func (DocFile) TableName() string {
+	return "backend.doc_file"
 }

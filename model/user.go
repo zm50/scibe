@@ -7,3 +7,7 @@ type User struct {
 	Name string `gorm:"unique"`
 	Pass string `gorm:"not null"`
 }
+
+func (User) TableName() string {
+	return "backend.user"
+}

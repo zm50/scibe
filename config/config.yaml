@@ -1,0 +1,9 @@
+jwt_secret: "zuimojushi666"
+ollama_endpoint: http://192.168.3.105:11434
+model: qwen2.5:0.5b
+db:
+  host: "localhost"
+  port: "5432"
+  username: "postgres"
+  password: "1234"
+  dbname: "sci"
